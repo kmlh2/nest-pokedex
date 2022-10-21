@@ -75,4 +75,9 @@ export class PokemonService {
     if(deletedCount === 0) throw new NotFoundException(`Pokemon not found, id: ${id}`)
     return;
   }
+
+  fillWithSeedData(pokemons: CreatePokemonDto[]){
+    console.log(pokemons);
+  }
+
 }
