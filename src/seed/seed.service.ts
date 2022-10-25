@@ -1,20 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosInstance } from 'axios';
 import { CreatePokemonDto } from 'src/pokemon/dto/create-pokemon.dto';
 import { PokemonService } from '../pokemon/pokemon.service';
 import { PokeResponse } from './interfaces/poke-response.interface';
+import { AxiosAdapter } from '../common/adapters/axios.adapter';
 
 @Injectable()
 export class SeedService {
   
-  private readonly axios: AxiosInstance = axios;
-
+  
   constructor(
     private readonly pokemonSrv: PokemonService,
+    private readonly http: AxiosAdapter
   ){}
 
   async loadDB() {
-    const { data } = await this.axios.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=600');
+    const data = await this.http.get<PokeResponse>('https://pokeapi.co/api/v2/pokemon?limit=700');
 
     let toLoad: CreatePokemonDto[] = [];
      
@@ -28,8 +28,7 @@ export class SeedService {
       })
     })
     
-    this.pokemonSrv.fillWithSeedData([]);
-    return toLoad;
+    return this.pokemonSrv.fillWithSeedData(toLoad);;
   }
 
  
